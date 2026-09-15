@@ -39,3 +39,24 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# prisma sqlite database
+/prisma/dev.db
+/prisma/dev.db-journal
+
+# uploaded images (managed at runtime)
+/public/uploads/
+
+# prisma sqlite database (any name)
+/prisma/*.db
+/prisma/*.db-journal
+
+# dev tool configs
+.devin/
+
+# root-level database (if any)
+/dev.db
+/dev.db-journal
+
+# source assets folder (not needed in repo, optimized versions in public/)
+/Video/
