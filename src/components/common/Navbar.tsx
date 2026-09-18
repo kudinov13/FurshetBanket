@@ -23,8 +23,8 @@ export function Navbar() {
       <div
         className={`mx-4 mt-4 rounded-2xl transition-all duration-300 ${
           isScrolled
-            ? 'liquid-glass'
-            : 'bg-white/60 backdrop-blur-sm border border-white/40'
+            ? 'liquid-glass liquid-glass-solid'
+            : 'bg-white/80 backdrop-blur-md border border-white/40'
         }`}
       >
         <div className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto">

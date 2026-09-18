@@ -66,8 +66,17 @@ body {
   pointer-events: none;
 }
 
+/* Stronger variant for floating UI (navbar) over dark/busy imagery —
+   keeps dark text readable regardless of the page beneath. */
+.liquid-glass-solid {
+  background:
+    linear-gradient(135deg, rgb(255 255 255 / 0.72), rgb(255 255 255 / 0.55)),
+    rgb(255 255 255 / 0.68);
+}
+
 @media (prefers-reduced-transparency: reduce) {
-  .liquid-glass {
+  .liquid-glass,
+  .liquid-glass-solid {
     background: rgb(255 255 255 / 0.96);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
