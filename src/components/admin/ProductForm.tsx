@@ -229,6 +229,7 @@ export function ProductForm({ categories, product }: Props) {
           id="description"
           name="description"
           rows={6}
+          enterKeyHint="enter"
           defaultValue={product?.description ?? ''}
           placeholder={'Каждая строка — с новой строки, например:\n- 5 тарталеток с икрой\n- 5 тарталеток с креветкой'}
           className="w-full rounded-xl border border-border bg-white px-4 py-3 text-primary outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition resize-y"
