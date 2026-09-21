@@ -6,7 +6,7 @@ import { DeleteProductButton } from '@/components/admin/DeleteProductButton'
 export default async function ProductsPage() {
   const products = await prisma.product.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { category: true },
+    include: { category: true, _count: { select: { images: true } } },
   })
 
   return (
@@ -62,6 +62,9 @@ export default async function ProductsPage() {
                     <td className="px-5 py-3">
                       <p className="text-primary font-medium">{p.name}</p>
                       <p className="text-secondary text-xs line-clamp-1 max-w-xs">{p.description}</p>
+                      {p._count.images > 1 && (
+                        <p className="text-secondary text-xs mt-0.5">{p._count.images} фото</p>
+                      )}
                     </td>
                     <td className="px-5 py-3">
                       <span className="text-xs bg-muted text-secondary px-2.5 py-1 rounded-full">

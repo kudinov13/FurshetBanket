@@ -12,7 +12,10 @@ export default async function EditProductPage({
   if (Number.isNaN(productId)) notFound()
 
   const [product, categories] = await Promise.all([
-    prisma.product.findUnique({ where: { id: productId } }),
+    prisma.product.findUnique({
+      where: { id: productId },
+      include: { images: { orderBy: { order: 'asc' } } },
+    }),
     prisma.category.findMany({ orderBy: { name: 'asc' } }),
   ])
 

@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import Image from 'next/image'
 import { useState } from 'react'
 import { ContactModal } from '../contact/ContactModal'
+import { ImageLightbox } from './ImageLightbox'
 
 const E = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -12,18 +13,25 @@ type Product = {
   description: string
   price: number
   image: string | null
+  images: { id: number; url: string }[]
   category: { name: string }
 }
+
+type LightboxState = { images: string[]; title: string } | null
 
 export function CatalogGridClient({ products }: { products: Product[] }) {
   const reduce = useReducedMotion()
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<string | undefined>()
+  const [lightbox, setLightbox] = useState<LightboxState>(null)
 
   const handleOrder = (name: string) => {
     setSelectedProduct(name)
     setModalOpen(true)
   }
+
+  const productImages = (p: Product): string[] =>
+    p.images.length > 0 ? p.images.map((i) => i.url) : p.image ? [p.image] : []
 
   return (
     <section id="catalog" className="py-24 bg-background">
@@ -64,10 +72,18 @@ export function CatalogGridClient({ products }: { products: Product[] }) {
                   delay: i * 0.08,
                 }}
               >
-                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
-                  {product.image ? (
+                <div
+                  className={`relative aspect-[4/3] overflow-hidden bg-muted ${
+                    productImages(product).length > 0 ? 'cursor-zoom-in' : ''
+                  }`}
+                  onClick={() => {
+                    const urls = productImages(product)
+                    if (urls.length > 0) setLightbox({ images: urls, title: product.name })
+                  }}
+                >
+                  {productImages(product).length > 0 ? (
                     <Image
-                      src={product.image}
+                      src={productImages(product)[0]}
                       alt={product.name}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -83,13 +99,20 @@ export function CatalogGridClient({ products }: { products: Product[] }) {
                       {product.category.name}
                     </span>
                   </div>
+                  {productImages(product).length > 1 && (
+                    <div className="absolute bottom-3 right-3">
+                      <span className="bg-black/60 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full">
+                        {productImages(product).length} фото
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-6 flex flex-col flex-1">
                   <h3 className="font-display text-xl font-semibold text-primary mb-2">
                     {product.name}
                   </h3>
-                  <p className="text-secondary text-sm leading-relaxed mb-4 flex-1">
+                  <p className="text-secondary text-sm leading-relaxed mb-4 flex-1 whitespace-pre-line">
                     {product.description}
                   </p>
                   <div className="flex items-center justify-between pt-4 border-t border-border/50">
@@ -118,6 +141,15 @@ export function CatalogGridClient({ products }: { products: Product[] }) {
         onClose={() => setModalOpen(false)}
         productName={selectedProduct}
       />
+
+      {lightbox && (
+        <ImageLightbox
+          images={lightbox.images}
+          startIndex={0}
+          title={lightbox.title}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </section>
   )
 }
