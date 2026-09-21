@@ -99,7 +99,7 @@ export function ProductForm({ categories, product }: Props) {
                       Главное
                     </span>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 flex justify-center gap-1 p-1 bg-black/50 opacity-0 group-hover/thumb:opacity-100 transition">
+                  <div className="absolute inset-x-0 bottom-0 flex justify-center gap-1 p-1 bg-black/50 opacity-100 md:opacity-0 md:group-hover/thumb:opacity-100 transition">
                     {!isDeleted && !isMain(key) && (
                       <button
                         type="button"
@@ -131,7 +131,7 @@ export function ProductForm({ categories, product }: Props) {
                       Главное
                     </span>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 flex justify-center gap-1 p-1 bg-black/50 opacity-0 group-hover/thumb:opacity-100 transition">
+                  <div className="absolute inset-x-0 bottom-0 flex justify-center gap-1 p-1 bg-black/50 opacity-100 md:opacity-0 md:group-hover/thumb:opacity-100 transition">
                     {!isMain(key) && (
                       <button
                         type="button"

@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { CaretLeft, CaretRight, X } from '@phosphor-icons/react'
 
 type Props = {
@@ -13,6 +13,8 @@ type Props = {
 export function ImageLightbox({ images, startIndex, title, onClose }: Props) {
   const [index, setIndex] = useState(startIndex)
   const [zoomed, setZoomed] = useState(false)
+  const touchStartX = useRef<number | null>(null)
+  const swiped = useRef(false)
 
   const prev = useCallback(() => {
     setIndex((i) => (i - 1 + images.length) % images.length)
@@ -38,17 +40,41 @@ export function ImageLightbox({ images, startIndex, title, onClose }: Props) {
     }
   }, [onClose, next, prev])
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+    swiped.current = false
+  }
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 50 && images.length > 1) {
+      if (dx < 0) next()
+      else prev()
+      swiped.current = true
+    }
+    touchStartX.current = null
+  }
+
   return (
     <div
       className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center"
-      onClick={onClose}
+      onClick={() => {
+        if (swiped.current) {
+          swiped.current = false
+          return
+        }
+        onClose()
+      }}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
       role="dialog"
       aria-modal="true"
       aria-label={title}
     >
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 text-white/80 hover:text-white p-2 cursor-pointer z-10"
+        className="absolute top-4 right-4 text-white/80 hover:text-white p-3 cursor-pointer z-10"
         aria-label="Закрыть"
       >
         <X size={28} weight="bold" />
@@ -57,10 +83,10 @@ export function ImageLightbox({ images, startIndex, title, onClose }: Props) {
       {images.length > 1 && (
         <button
           onClick={(e) => { e.stopPropagation(); prev() }}
-          className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 cursor-pointer z-10"
+          className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 cursor-pointer z-10"
           aria-label="Предыдущее фото"
         >
-          <CaretLeft size={24} weight="bold" />
+          <CaretLeft size={26} weight="bold" />
         </button>
       )}
 
@@ -85,14 +111,14 @@ export function ImageLightbox({ images, startIndex, title, onClose }: Props) {
       {images.length > 1 && (
         <button
           onClick={(e) => { e.stopPropagation(); next() }}
-          className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 cursor-pointer z-10"
+          className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-3 cursor-pointer z-10"
           aria-label="Следующее фото"
         >
-          <CaretRight size={24} weight="bold" />
+          <CaretRight size={26} weight="bold" />
         </button>
       )}
 
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/80 text-sm bg-black/50 rounded-full px-4 py-1.5 pointer-events-none">
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 text-white/80 text-sm bg-black/50 rounded-full px-4 py-1.5 pointer-events-none whitespace-nowrap">
         {title}{images.length > 1 ? ` — ${index + 1}/${images.length}` : ''}
       </div>
     </div>
