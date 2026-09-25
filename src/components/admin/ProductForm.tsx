@@ -165,7 +165,7 @@ export function ProductForm({ categories, product }: Props) {
           className="text-sm text-secondary file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-primary file:text-white file:cursor-pointer file:hover:bg-primary/90 cursor-pointer"
         />
         <p className="text-xs text-secondary mt-2">
-          JPEG, PNG, WebP, AVIF, GIF. До 5 МБ каждое. Первое фото — главное (видно в каталоге), можно выбрать другое кнопкой «Главное».
+          JPEG, PNG, WebP, AVIF, GIF. До 10 МБ каждое. Первое фото — главное (видно в каталоге), можно выбрать другое кнопкой «Главное».
         </p>
       </div>
 

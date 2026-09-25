@@ -3,7 +3,7 @@ import { promises as fs } from 'node:fs'
 import path from 'node:path'
 
 const UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads')
-const MAX_SIZE = 5 * 1024 * 1024 // 5 MB
+const MAX_SIZE = 10 * 1024 * 1024 // 10 MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif']
 
 /**
@@ -17,7 +17,7 @@ export async function saveUploadedImage(file: File | null | undefined): Promise<
     throw new Error('Недопустимый тип файла. Разрешены: JPEG, PNG, WebP, AVIF, GIF.')
   }
   if (file.size > MAX_SIZE) {
-    throw new Error('Файл слишком большой. Максимум 5 МБ.')
+    throw new Error('Файл слишком большой. Максимум 10 МБ.')
   }
 
   await fs.mkdir(UPLOAD_DIR, { recursive: true })
